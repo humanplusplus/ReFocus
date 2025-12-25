@@ -38,6 +38,9 @@ symulowanych do danych rzeczywistych bez konieczności zmiany architektury aplik
 Dzięki temu aplikacja jest projektowana jako platforma niezależna od źródła danych, 
 przygotowana do integracji z docelowym torem pomiarowym w kolejnych etapach projektu.
 
+## Schemat projektu
+![Application schema](./doc/schema.png)
+
 ## Komponenty systemu
 Komponenty systemu można podzielić na 4 warstwy
 
