@@ -1,7 +1,5 @@
 # EarEEG — Demo App for Daily Focus Tracking
 
-PL
-
 # Opis projektu
 
 Projekt stanowi rozwinięcie prac nad systemem Ear EEG, którego celem jest rejestracja, transmisja 
@@ -10,12 +8,6 @@ ucha.
 W trakcie realizacji projektu zdecydowano się na celowe rozdzielenie architektury systemu na dwa 
 komplementarne strumienie rozwojowe, co umożliwiło równoległy rozwój toru pomiarowego oraz warstwy 
 aplikacyjnej, a także przyspieszyło proces testowania i walidacji rozwiązania.
-
-- [Podział projektu](./README.md#podzial-projektu-na-dwa-etapy-rozwojowe)
-  - [Wspólny model danych](./README.md#wspolny-model-danych)
-- [Komponenty systemu](./README.md#komponenty-systemu)
-- [Model danych EEG](./README.md#model-danych-eeg)
-- [Analiza ryzyka](./README.md#analiza-ryzyka)
 
 ## Podział projektu na dwa etapy rozwojowe
 
