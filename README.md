@@ -1,5 +1,3 @@
-# EarEEG — Demo App for Daily Focus Tracking
-
 # Opis projektu
 
 Projekt stanowi rozwinięcie prac nad systemem Ear EEG, którego celem jest rejestracja, transmisja 
@@ -39,7 +37,7 @@ Dzięki temu aplikacja jest projektowana jako platforma niezależna od źródła
 przygotowana do integracji z docelowym torem pomiarowym w kolejnych etapach projektu.
 
 ## Schemat projektu
-![Application schema](./doc/schema.png)
+![Application schema](./doc/schema-no-cloud.png)
 
 ## Komponenty systemu
 Komponenty systemu można podzielić na 4 warstwy
