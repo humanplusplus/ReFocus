@@ -1,0 +1,10 @@
+*.o
+*.obj
+*.exe
+*.dll
+.qmake.stash
+CMakeLists.txt.user
+build/
+build-*/
+SQLite db — skrót*
+data/openbci_training_data_cut.csv
