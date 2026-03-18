@@ -7,6 +7,8 @@
 #include <QDebug>
 
 class EEGModel;
+class NoteModel;
+class NoteRepository;
 class DataPipeline;
 class SQLiteManager;
 class IDataSource;
@@ -17,13 +19,18 @@ class ApplicationController : public QObject
     Q_OBJECT
 public:
     explicit ApplicationController(QObject *parent = nullptr);
+    ~ApplicationController();
 
-    // Konfiguracja wszystkiego i wstrzykiwanie do silnika QML
+    // NA RAZIE WYCOFUJEMY - BĘDZIE WDROŻONE W KOLEJNYM ETAPIE
+    // Q_INVOKABLE void startStreaming(int mode); // 0: CSV, 1: BIN, 2: BLE
+    // Q_INVOKABLE void stopStreaming();
+
     void initialize(QQmlApplicationEngine *engine);
 
 private:
-    // Trzymanie głównych modułów aplikacji
     EEGModel* m_eegModel;
+    NoteModel* m_noteModel;
+    NoteRepository* m_noteRepo;
     DataPipeline* m_dataPipeline;
     IDataSource* m_dataSource;
     DatabaseManager* m_dbManager;

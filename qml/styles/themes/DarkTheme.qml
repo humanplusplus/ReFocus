@@ -9,7 +9,7 @@ QtObject {
     property QtObject colors: QtObject {
         // *** GENERAL SETTINGS ***
         property color backgroundColor: "#0A0A0A"
-        property color linesColor:      "#000000"
+        property color linesColor:      "#3D3D3B" //"#000000"
         property color ribbonColor:     "#000007"
 
         // *** CARDS PROPERIES ***
@@ -27,7 +27,7 @@ QtObject {
     }
 
     property QtObject fonts: QtObject {
-        property string fontStyle: "Courier New"
+        property string fontStyle: "Segoe UI"
         property int fontSize: 16
         property color fontColor: "#ECECF6"
     }

@@ -55,6 +55,9 @@ Page {
             ButtonWithText {
                 anchors.right: parent.right
                 buttonText: innerButtonText
+                onClicked: {
+                    noteModel.addNote(noteDateItem.text, descriptionItem.text, "3", "exampleTag");
+                }
             }
         }
     }

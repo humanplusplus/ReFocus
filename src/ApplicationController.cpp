@@ -3,6 +3,8 @@
 
 #include "ApplicationController.h"
 #include "models/EEGModel.h"
+#include "models/NoteModel.h"
+#include "storage/NoteRepository.h"
 #include "providers/CsvDataSource.h"
 #include "storage/DataPipeline.h"
 #include "storage/SQLiteManager.h"
@@ -12,10 +14,25 @@
 ApplicationController::ApplicationController(QObject *parent)
     : QObject(parent),
     m_eegModel(nullptr),
+    m_noteModel(nullptr),
+    m_noteRepo(nullptr),
     m_dataPipeline(nullptr),
     m_dataSource(nullptr),
-    m_dbManager(nullptr)
+    m_dbManager(nullptr),
+    m_workerThread(nullptr)
 {}
+
+ApplicationController::~ApplicationController()
+{
+    qInfo() << "Cleaning up ApplicationController and stopping threads...";
+
+    if (m_workerThread) {
+        m_workerThread->quit();
+        m_workerThread->wait(2000);
+    }
+
+    qInfo() << "Cleanup complete.";
+}
 
 void ApplicationController::initialize(QQmlApplicationEngine *engine)
 {
@@ -24,37 +41,48 @@ void ApplicationController::initialize(QQmlApplicationEngine *engine)
     // 1. Inicjalizacja modułów
     m_eegModel = new EEGModel(this);
 
-    // 2. Konfiguracja bazy danych
-    // Tworzenie lokalnego SQLite
+    // 2. Konfiguracja bazy danych: tworzenie lokalnego SQLite
     QString dbPath = DatabaseConfig::getSqliteDbPath();
     std::unique_ptr<IDatabaseManager> localBackend = std::make_unique<SQLiteManager>(dbPath);
     m_dbManager = new DatabaseManager(std::move(localBackend), nullptr, this);
     m_dbManager->initialize();
 
-    // 3. Tworzenie rurociągu danych
-    // Przekazujemy nullptr zamiast DatabaseManager, skoro na razie nie zapisujemy tam EEG
-    m_dataPipeline = new DataPipeline(nullptr, this);
+    // --- TWORZENIE NOWYCH MODUŁÓW ---
+    m_noteRepo = new NoteRepository(m_dbManager, this);
+    m_noteModel = new NoteModel(m_noteRepo, this);
 
-    // 4. Tworzenie źródła danych (np. plik CSV)
-    m_dataSource = new CsvDataSource(DatabaseConfig::getCsvPath());
+    connect(m_noteRepo, &NoteRepository::noteDataChanged, m_noteModel, &NoteModel::refresh);
+
+    // 3. Rurociąg danych i źródło danych CSV: przekazujemy nullptr zamiast DatabaseManager, skoro na razie nie zapisujemy tam EEG
+    m_dataPipeline = new DataPipeline(nullptr, nullptr);
+    m_dataSource = new CsvDataSource(DatabaseConfig::getCsvPath(), nullptr);
+
+    // 4. Wątek roboczy
     m_workerThread = new QThread(this);
 
-    // Obsługa startu i sprzątania wątku
+    // // 5. PRZENIESIENIE DO WĄTKU (najpierw przenosimy, potem łączymy)
+    // m_dataSource->moveToThread(m_workerThread);
+    // m_dataPipeline->moveToThread(m_workerThread);
+
+    // 6. ŁĄCZENIE SYGNAŁÓW
     connect(m_workerThread, &QThread::started, m_dataSource, &IDataSource::start);
-    connect(m_workerThread, &QThread::finished, m_dataSource, &QObject::deleteLater);
+    connect(m_workerThread, &QThread::started, m_dataPipeline, &DataPipeline::startProcessing);
 
-    m_workerThread->start();
-
-    // 5. ŁĄCZENIE SYGNAŁÓW (Logika przepływu danych)
-    // KROK A: Źródło (CSV) -> Pipeline
     connect(m_dataSource, &IDataSource::dataReceived, m_dataPipeline, &DataPipeline::onNewSampleReceived);
-
-    // KROK B: Rurociąg (paczki danych) -> Model (wykres)
     connect(m_dataPipeline, &DataPipeline::batchReadyForUI, m_eegModel, &EEGModel::addBatch);
 
-    // 6. Udostępnienie obiektów do QML
+    // Czyszczenie
+    connect(m_workerThread, &QThread::finished, m_dataSource, &QObject::deleteLater);
+    connect(m_workerThread, &QThread::finished, m_dataPipeline, &QObject::deleteLater);
+
+    // 7. START
+    m_workerThread->start();
+
+    // 8. Udostępnienie obiektów do QML
     QQmlContext *context = engine->rootContext();
     context->setContextProperty("eegModel", m_eegModel);
+    context->setContextProperty("noteRepo", m_noteRepo);
+    context->setContextProperty("noteModel", m_noteModel);
     context->setContextProperty("appController", this);
 
     qInfo() << "Initialization complete.";

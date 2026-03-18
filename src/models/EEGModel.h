@@ -6,31 +6,34 @@
 #include <QPointF>
 #include <QMap>
 #include <QDebug>
+#include <algorithm>
+#include <cmath>
 
 class EEGModel : public QObject {
     Q_OBJECT
-    // Właściwość do śledzenia czasu, aby przesuwać oś X w QML
-    Q_PROPERTY(double lastestTimestamp READ lastestTimestamp NOTIFY dataUpdated)
+    Q_PROPERTY(double latestTimestamp READ latestTimestamp NOTIFY dataUpdated)
 
 public:
     explicit EEGModel(QObject *parent = nullptr);
 
-    // Ta metoda pozwala LinesGraph w QML pobrać punkty dla konkretnego kanału
-    Q_INVOKABLE QVector<QPointF> getPointsForChannel(int channelIndex) const;
+    Q_INVOKABLE QVector<QPointF> getLeadingPoints(int channelIndex) const; // Pobiera punkty od 0 do kursora
+    Q_INVOKABLE QVector<QPointF> getTrailingPoints(int channelIndex) const; // Pobiera punkty od kursora + przerwa do 5s
+    Q_INVOKABLE void clear();
 
-    double lastestTimestamp() const { return m_lastestTimestamp; }
+    double latestTimestamp() const { return m_latestTimestamp; }
 
 public slots:
-    void addBatch(const QMap<int, QVector<QPointF>> &batch); // Slot odbierający paczkę z DataPipeline (zmieniony typ danych!)
+    void addBatch(const QMap<int, QVector<QPointF>> &batch);
 
 signals:
     void dataUpdated();
 
 private:
-    QMap<int, double> m_firstValues; // zapamiętuje poziom bazowy
-    QMap<int, QVector<QPointF>> m_channelBuffers; // przechowujemy osobny wektor punktów dla każdego z 8 kanałów
-    double m_lastestTimestamp = 0;
-    const int m_maxSamplesPerChannle = 2000; // Limit punktów w pamięci (np. 2000 próbek = ~8 sekund przy 250Hz)
+    QMap<int, QVector<QPointF>> m_fullHistory; // Pełna historia punktów (nieposortowana paczka dla fmod)
+    double m_latestTimestamp = 0;
+    const double m_windowSize = 5.0;
+    const double m_gapSize = 0.1; // Szerokość "dziury" przed kursorem
+    const int m_maxSamplesPerChannel = 2000;
 };
 
 #endif // EEGMODEL_H

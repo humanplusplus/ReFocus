@@ -10,14 +10,50 @@
 namespace DatabaseConfig {
 
     inline QString getCsvPath() {
-        return QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("../../data/openbci_training_data_cut.csv");
+        // return QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("../../data/openbci_training_data_cut.csv");
+
+        static const QString cachedCsvPath = []() {
+            QString basePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
+            QString subFolder;
+            QString fileName;
+
+            #if defined(APP_STATE_PRODUCTION)
+                subFolder = "PROD";
+                fileName = "openbci_training_data_cut.csv";
+            #else
+                subFolder = "DEV";
+                fileName = "openbci_training_data_cut.csv";
+            #endif
+
+            QDir dir(basePath);
+            dir.mkpath(subFolder);
+
+            return dir.absoluteFilePath(subFolder + "/" + fileName);
+        }();
+
+        return cachedCsvPath;
     }
 
     inline QString getLogFilePath() {
         static const QString cachedLogPath = []() {
-            QString path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-            QDir().mkpath(path);
-            return QDir(path).absoluteFilePath("app.log");
+            QString basePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
+            QString subFolder;
+            QString fileName;
+
+            #if defined(APP_STATE_PRODUCTION)
+                subFolder = "PROD";
+                fileName = "app_PROD.log.0";
+            #else
+                subFolder = "DEV";
+                fileName = "app_DEV.log.0";
+            #endif
+
+            QDir dir(basePath);
+            dir.mkpath(subFolder);
+
+            return dir.absoluteFilePath(subFolder + "/" + fileName);
         }();
 
         return cachedLogPath;
@@ -25,25 +61,26 @@ namespace DatabaseConfig {
 
     inline QString getSqliteDbPath() {
         static const QString cachedSqliePath = []() {
-            QString path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-            QDir().mkpath(path);
-            return QDir(path).absoluteFilePath("EarEEG_PROD.db");
+            QString basePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
+            QString subFolder;
+            QString fileName;
+
+            #if defined(APP_STATE_PRODUCTION)
+                subFolder = "PROD";
+                fileName = "EarEEG_PROD.db";
+            #else
+                subFolder = "DEV";
+                fileName = "EarEEG_DEV.db";
+            #endif
+
+            QDir dir(basePath);
+            dir.mkpath(subFolder);
+
+            return dir.absoluteFilePath(subFolder + "/" + fileName);
         }();
         return cachedSqliePath;
     }
-
-    // inline QString DEFAULT_CSV_PATH = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("../../") + "/data/openbci_training_data_cut.csv";
-
-    // inline QString DEFAULT_SQLITE_DB_PATH = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QDir::separator() + "EarEEG_PROD.db";
-    // inline QString DEFAULT_SQLITE_DB_PATH_TEST = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QDir::separator() + "EarEEG_TEST.db";
-
-    // // W Superbase projekt: EarEEG_DemoApp
-    // inline const QString SUPABASE_URL = "";
-    // inline const QString SUPABASE_API_KEY = "";
-
-    // // W Superbase projekt: EarEEG_DemoApp_Test
-    // inline const QString SUPABASE_URL_TEST = "";
-    // inline const QString SUPABASE_API_KEY_TEST = "";
 
     inline void printDbPath() {
         qDebug() << "Using SQLite database at: " << getSqliteDbPath();

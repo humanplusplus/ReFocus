@@ -2,93 +2,73 @@
 
 EEGModel::EEGModel(QObject *parent) : QObject(parent) {}
 
-QVector<QPointF> EEGModel::getPointsForChannel(int channelIndex) const {
-    return m_channelBuffers.value(channelIndex);
-}
-
 void EEGModel::addBatch(const QMap<int, QVector<QPointF>> &batch) {
-    const double windowSize = 5.0;
-    const double offsetStep = 50.0;
+
+    if (batch.isEmpty()) return;
+
+    const double offsetStep = 100.0;
 
     for (auto it = batch.begin(); it != batch.end(); ++it) {
         int ch = it.key();
-        QVector<QPointF> &currentBuffer = m_channelBuffers[ch];
         QVector<QPointF> incomingPoints = it.value();
 
-        for (QPointF &p : incomingPoints) {
-            // 1. Obliczamy X w trybie Sweep (modulo)
-            double xPos = fmod(p.x(), windowSize);
+        for (const QPointF &p : incomingPoints) {
+            // 1. Obliczamy pozycję X w oknie 0-5s
+            double xPos = fmod(p.x(), m_windowSize);
 
-            // 2. Y z mocniejszym gainem (np. x 1.0 zamiast 0.01)
-            // Używamy baseline, żeby sygnał oscylował wokół zera
-            double zeroedY = p.y(); // p.y ma już gain z Pipeline
-            p.setX(xPos);
-            p.setY(zeroedY + (ch * offsetStep));
+            // 2. Dodajemy do historii (używamy y z batcha, który jest już wycentrowany)
+            m_fullHistory[ch].append(QPointF(xPos, p.y() + (ch * offsetStep)));
 
-            // 3. Usuwamy stare punkty "przed" linią kasującą
-            currentBuffer.erase(
-                std::remove_if(currentBuffer.begin(), currentBuffer.end(), [&](const QPointF& oldP) {
-                    return (oldP.x() >= xPos && oldP.x() < xPos + 0.1);
-                }),
-                currentBuffer.end()
-                );
-            currentBuffer.append(p);
+            // 3. Ograniczamy historię (utrzymujemy nieco więcej niż mieści się w oknie)
+            if (m_fullHistory[ch].size() > m_maxSamplesPerChannel) {
+                m_fullHistory[ch].remove(0, m_fullHistory[ch].size() - m_maxSamplesPerChannel);
+            }
         }
-
-        // 4. Sortowanie jest KLUCZOWE, żeby LineSeries nie rysowało prostych linii przez cały ekran
-        std::sort(currentBuffer.begin(), currentBuffer.end(), [](const QPointF& a, const QPointF& b) {
-            return a.x() < b.x();
-        });
     }
+
+    // Zapamiętujemy ostatni czas do pozycjonowania kursora
+    m_latestTimestamp = batch.first().last().x();
     emit dataUpdated();
 }
 
-// void EEGModel::addBatch(const QMap<int, QVector<QPointF>> &batch)
-// {
-//     if (batch.isEmpty()) return;
+QVector<QPointF> EEGModel::getLeadingPoints(int ch) const {
 
-//     // Logowanie dla diagnostyki
-//     if(!batch.isEmpty() && !batch.first().isEmpty()) {
-//         qDebug() << "Bieżacy X wysłany do QML: " << batch.first().last().x();
-//     }
+    QVector<QPointF> points;
+    double currentX = fmod(m_latestTimestamp, m_windowSize);
 
-//     const double channelOffsetStep = 10.0;
+    for (const QPointF &p : m_fullHistory.value(ch)) {
+        if (p.x() <= currentX) points.append(p);
+    }
+    std::sort(points.begin(), points.end(), [](const QPointF &a, const QPointF &b) { return a.x() < b.x(); });
+    return points;
+}
 
-//     for (auto it = batch.begin(); it != batch.end(); ++it) {
-//         int ch = it.key();
-//         QVector<QPointF> newPoints = it.value();
+QVector<QPointF> EEGModel::getTrailingPoints(int ch) const {
 
-//         // 1. Zapamiętujemy pierwszy poziom sygnału (baseline) dla każdego kanału
-//         if (!m_firstValues.contains(ch) && !newPoints.isEmpty()) {
-//             m_firstValues[ch] = newPoints.first().y();
-//             qDebug() << "Channel " << ch << " baseline set to:" << m_firstValues[ch];
-//         }
+    QVector<QPointF> points;
+    double currentX = fmod(m_latestTimestamp, m_windowSize);
+    double gapEdge = currentX + m_gapSize;
 
-//         double currentOffset = ch * channelOffsetStep;
+    for (const QPointF &p : m_fullHistory.value(ch)) {
+        if (gapEdge < m_windowSize) {
+            if (p.x() > gapEdge) points.append(p);
+        } else {
+            // Jeśli gap zawija się na początek okna
+            if (p.x() > gapEdge - m_windowSize && p.x() < currentX) {
+                // pomin punkt
+            } else if (p.x() > currentX && p.x() < gapEdge) {
+                // pomin punkt
+            } else {
+                // to specyficzny przypadek przy samym końcu okna
+            }
+        }
+    }
+    std::sort(points.begin(), points.end(), [](const QPointF &a, const QPointF &b) { return a.x() < b.x(); });
+    return points;
+}
 
-//         for (QPointF &point : newPoints) {
-//             // Pobierz baseline. Jeśli go nie ma, użyj aktualnego Y (wynik będzie 0)
-//             double baseline = m_firstValues.value(ch, point.y());
-
-//             double zeroedY = point.y() - baseline;
-
-//             // Ustawienie punktu: (Sygnał * Skala) + Offset kanału
-//             // Dodaj mnożnik 2.0 lub 5.0, jeśli sygnał jest zbyt płaski (mikrowolty są małe)
-//             point.setY((zeroedY * 1.0) + currentOffset);
-//         }
-
-//         m_channelBuffers[ch].append(newPoints);
-
-//         if(m_channelBuffers[ch].size() > m_maxSamplesPerChannle) {
-//             int toRemove = m_channelBuffers[ch].size() - m_maxSamplesPerChannle;
-//             m_channelBuffers[ch].remove(0, toRemove);
-//         }
-//     }
-
-//     // Aktualizacja timestampu dla osi X
-//     if(!batch.isEmpty() && !batch.first().isEmpty()) {
-//         m_lastestTimestamp = batch.first().last().x();
-//     }
-
-//     emit dataUpdated();
-// }
+void EEGModel::clear() {
+    m_fullHistory.clear();
+    m_latestTimestamp = 0;
+    emit dataUpdated();
+}

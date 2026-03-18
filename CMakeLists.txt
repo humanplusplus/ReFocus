@@ -52,6 +52,7 @@ qt_add_qml_module(appEarEEG_DemoApp
         qml/screens/EegChartScreen.qml
         qml/screens/SettingsScreen.qml
         qml/screens/NoteScreen.qml
+        qml/screens/DataSourceSelectorScreen.qml
 
         qml/sharedComponents/CustomLabel.qml
         qml/sharedComponents/CustomLabelClick.qml
@@ -72,6 +73,7 @@ qt_add_qml_module(appEarEEG_DemoApp
         src/core/EEGSample.h
         src/core/User.h
         src/core/Participant.h
+        src/core/Note.h
 
         src/utils/Logger.h
         src/utils/Logger.cpp
@@ -89,6 +91,8 @@ qt_add_qml_module(appEarEEG_DemoApp
         src/storage/UserRepository.cpp
         src/storage/ParticipantRepository.h
         src/storage/ParticipantRepository.cpp
+        src/storage/NoteRepository.h
+        src/storage/NoteRepository.cpp
 
         src/providers/IDataSource.h
         src/providers/CsvDataSource.h
@@ -104,9 +108,10 @@ qt_add_qml_module(appEarEEG_DemoApp
         src/models/ParticipantModel.cpp
         src/models/EEGModel.h
         src/models/EEGModel.cpp
+        src/models/NoteModel.h
+        src/models/NoteModel.cpp
 
     RESOURCES
-        data/openbci_training_data_cut.csv
         README.md
 
         # GENERAL

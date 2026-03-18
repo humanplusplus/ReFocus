@@ -11,19 +11,21 @@ ApplicationWindow {
     height: 640
 
     // Screens paths
-    property string homeScreenPath:         UiSettings.rootPathToQmlScreens + "EegChartScreen.qml" // "HomeScreen.qml"
-    property string dataScreenPath:         UiSettings.rootPathToQmlScreens + "DataScreen.qml"
-    property string settingsScreenPath:     UiSettings.rootPathToQmlScreens + "SettingsScreen.qml"
-    property string userDetailsScreenPath:  UiSettings.rootPathToQmlScreens + "TestScreen.qml" // "UserDetailsScreen.qml"
-    property string logoutScreenPath:       UiSettings.rootPathToQmlScreens + "EegChartScreen.qml" // "LogOutScreen.qml"
+    property string homeScreenPath:             UiSettings.rootPathToQmlScreens + "HomeScreen.qml"
+    property string dataScreenPath:             UiSettings.rootPathToQmlScreens + "DataScreen.qml"
+    property string settingsScreenPath:         UiSettings.rootPathToQmlScreens + "SettingsScreen.qml"
+    property string userDetailsScreenPath:      UiSettings.rootPathToQmlScreens + "UserDetailsScreen.qml"
+    property string logoutScreenPath:           UiSettings.rootPathToQmlScreens + "LogOutScreen.qml"
+    property string eegChartScreenPath:         UiSettings.rootPathToQmlScreens + "EegChartScreen.qml"
 
     // Menus titles
-    property string headerTitle:            "Attention"
+    property string headerTitle:            "Your Brain Focus"
     property string homeTitle:              "Home"
     property string dataTitle:              "EarEEG Data"
     property string userDetailsTitle:       "User Details"
     property string settingsTitle:          "Settings"
     property string logoutTitle:            "Logout"
+    property string eegChartTitle:          "EEG Chart"
 
     Material.accent: "transparent"
     background: Rectangle {
@@ -137,7 +139,7 @@ ApplicationWindow {
         edge: Qt.LeftEdge
 
         background: Rectangle {
-            color: ThemeManager.colors.cardsBackgroundColor
+            color: ThemeManager.colors.backgroundColor
         }
 
         ListView {
@@ -146,6 +148,7 @@ ApplicationWindow {
             model: [
                 homeTitle,
                 dataTitle,
+                eegChartTitle,
                 userDetailsTitle,
                 settingsTitle,
                 logoutTitle
@@ -153,6 +156,10 @@ ApplicationWindow {
             delegate: ItemDelegate {
                 width: parent.width
                 height: 50
+
+                background: Rectangle {
+                    color: "transparent"
+                }
 
                 contentItem: Text {
                     anchors.left: parent.left
@@ -183,6 +190,11 @@ ApplicationWindow {
                             homeButton.visible = true
                             headerLabel.text = dataTitle
                             stackView.push(dataScreenPath)
+                            footer.visible = false
+                        } else if (modelData === eegChartTitle) {
+                            homeButton.visible = true
+                            headerLabel.text = eegChartTitle
+                            stackView.push(eegChartScreenPath)
                             footer.visible = false
                         } else if (modelData === userDetailsTitle) {
                             homeButton.visible = true
@@ -232,12 +244,12 @@ ApplicationWindow {
 
         TabButtonFooter {
             stackViewPath: Qt.resolvedUrl(dataScreenPath)
-            iconPath: ThemeManager.icons.chartsIcon
+            iconPath: ThemeManager.icons.userIcon
         }
 
         TabButtonFooter {
-            stackViewPath: Qt.resolvedUrl(userDetailsScreenPath)
-            iconPath: ThemeManager.icons.userIcon
+            stackViewPath: Qt.resolvedUrl(eegChartScreenPath)
+            iconPath: ThemeManager.icons.chartsIcon
         }
     }
 }

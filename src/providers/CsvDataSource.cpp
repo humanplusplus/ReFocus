@@ -5,25 +5,24 @@
 #include "CsvDataSource.h"
 
 CsvDataSource::CsvDataSource(const QString &filePath, QObject *parent)
-    : IDataSource(parent), m_filePath(filePath)
-{
-    // Tworzymy timer bez rodzica. Zostanie on przeniesiony do wątku razem z klasą.
-    m_timer = new QTimer();
-}
+    : IDataSource(parent), m_filePath(filePath), m_timer(nullptr) {}
 
 CsvDataSource::~CsvDataSource()
 {
     if (m_timer) {
         m_timer->stop();
-        m_timer->deleteLater();
+        // m_timer->deleteLater();
     }
 }
 
 bool CsvDataSource::start()
 {
-    // Jeśli timer nie ma rodzica, przypisujemy go teraz (jesteśmy już w Worker Thread)
-    if (m_timer && !m_timer->parent()) {
-        m_timer->setParent(this);
+    // 1. BEZPIECZNE TWORZENIE TIMERA
+    // Jeśli timer nie istnieje, tworzymy go tutaj.
+    // Ponieważ start() jest wywołane przez sygnał QThread::started,
+    // timer zostanie stworzony w odpowiednim wątku roboczym.
+    if (!m_timer) {
+        m_timer = new QTimer(this);
         connect(m_timer, &QTimer::timeout, this, &CsvDataSource::readNextLine);
     }
 
@@ -43,10 +42,40 @@ bool CsvDataSource::start()
         }
     }
 
+    // Teraz m_timer na pewno nie jest nullem
     m_timer->start(1000 / m_frequency);
     qInfo() << "CSV Thread started reading:" << m_filePath;
     return true;
 }
+
+// bool CsvDataSource::start()
+// {
+//     // Jeśli timer nie ma rodzica, przypisujemy go teraz (jesteśmy już w Worker Thread)
+//     if (m_timer && !m_timer->parent()) {
+//         m_timer->setParent(this);
+//         connect(m_timer, &QTimer::timeout, this, &CsvDataSource::readNextLine);
+//     }
+
+//     m_file.setFileName(m_filePath);
+//     if(!m_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+//         qCritical() << "Cannot open CSV file: " << m_filePath;
+//         return false;
+//     }
+
+//     // Pominięcie nagłówka i komentarzy
+//     while (!m_file.atEnd()) {
+//         qint64 pos = m_file.pos();
+//         QString line = m_file.readLine().trimmed();
+//         if(!line.startsWith('%') && !line.isEmpty()) {
+//             m_file.seek(pos);
+//             break;
+//         }
+//     }
+
+//     m_timer->start(1000 / m_frequency);
+//     qInfo() << "CSV Thread started reading:" << m_filePath;
+//     return true;
+// }
 
 void CsvDataSource::stop()
 {

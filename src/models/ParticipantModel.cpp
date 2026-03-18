@@ -20,11 +20,11 @@ QVariant ParticipantModel::data(const QModelIndex &index, int role) const {
     const Participant &p = m_items[index.row()];
 
     switch (role) {
-    case IdRole: return p.id;
-    case NicknameRole: return p.nickname;
-    case GenderRole: return p.gender;
-    case BirthYearRole: return p.birthYear;
-    default: return QVariant();
+        case IdRole: return p.id;
+        case NicknameRole: return p.nickname;
+        case GenderRole: return p.gender;
+        case BirthYearRole: return p.birthYear;
+        default: return QVariant();
     }
 }
 

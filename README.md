@@ -1,76 +1,43 @@
-# Opis projektu
+# Project Description
 
-Projekt stanowi rozwinięcie prac nad systemem Ear EEG, którego celem jest rejestracja, transmisja 
-oraz wizualizacja sygnałów elektroencefalograficznych pozyskiwanych z elektrod umieszczonych w obrębie 
-ucha.
-W trakcie realizacji projektu zdecydowano się na celowe rozdzielenie architektury systemu na dwa 
-komplementarne strumienie rozwojowe, co umożliwiło równoległy rozwój toru pomiarowego oraz warstwy 
-aplikacyjnej, a także przyspieszyło proces testowania i walidacji rozwiązania.
+This project is a continuation of work on the Ear EEG system, which aims to record, transmit, and visualize electroencephalographic signals obtained from electrodes placed around the ear. During implementation, the system architecture was intentionally divided into two complementary development streams. This allowed for the parallel development of the measurement path and the application layer, while accelerating the testing and validation process.
 
-## Podział projektu na dwa etapy rozwojowe
+## Project Division into Two Development Stages
 
-**Etap A**: Tor pomiarowy EEG (hardware + akwizycja danych)
+**Stage A**: EarEEG Measurement Path (Hardware)
 
-Pierwszy strumień projektu koncentruje się na fizycznym pomiarze sygnałów EEG.
-Obejmuje on połączenie elektrod EEG z dedykowanym układem pomiarowym oraz transmisję danych 
-do komputera w celu dalszej analizy.
-Etap ten odpowiada za pozyskiwanie danych rzeczywistych i stanowi docelowe źródło sygnałów EEG 
-w systemie.
-Poniższy projekt jest rozwinięciem projektu, w którym realizujemy tor pomiarowy dla Ear EEG. 
+The first part of the project focuses on constructing and launching the hardware layer responsible for the physical measurement of EEG signals. This process involved assembling electronic components purchased through a mini-grant obtained from [the Laboratorium Pomysłów (Idea Lab) at the University of Warsaw (UW)](https://iuw.edu.pl/laboratorium-pomyslow-final-programu-i-prezentacje-najlepszych-projektow/).The work on this part was carried out independently and served as the foundation for further activities.
 
-**Etap B**: Platforma aplikacyjna i symulacyjna EEG
+The primary inspiration for the measurement path was [the OpenBCI project](https://pmc.ncbi.nlm.nih.gov/articles/PMC9529594/#ab010), from which specialized electrodes were also purchased. The heart of the system is the ADS1299 evaluation board from Texas Instruments (TI). The entire system was successfully launched and configured using TI's dedicated software.
 
-Drugi etap projektu skupia się na opracowaniu aplikacji umożliwiającej wizualizację sygnałów EEG 
-w czasie rzeczywistym oraz na stworzeniu środowiska pozwalającego na jej rozwój niezależnie 
-od fizycznego toru pomiarowego.
-W tym celu zastosowano mikrokontroler z firmware symulującym sygnały EEG, który przesyła dane 
-do aplikacji za pomocą komunikacji Bluetooth Low Energy (BLE). Takie podejście umożliwia 
-testowanie interfejsu użytkownika, mechanizmów buforowania oraz synchronizacji danych bez konieczności 
-ciągłego korzystania z docelowego sprzętu pomiarowego.
+This stage includes connecting the electrodes to the measurement system and transmitting data to a computer. Detailed information and documentation for this stage can be found here: [LINK]()
 
+**Stage B**: EEG Application and Simulation Platform (Available in this repository)
 
-### Wspólny model danych
+The second stage of the project focuses on developing an application that enables real-time visualization of EEG signals and creating an environment for its development independent of the physical measurement path. To achieve this, the application utilizes training data provided by [OpenBCI](https://github.com/MKnierim/openbci-ceegrids/blob/main/code/data/training_data_cut.csv). This approach allows for testing the user interface, buffering mechanisms, and data synchronization without the continuous need for the target measurement hardware.
 
-Oba etapy projektu wykorzystują wspólny model danych EEG, co umożliwia płynne przejście od danych 
-symulowanych do danych rzeczywistych bez konieczności zmiany architektury aplikacji.
-Dzięki temu aplikacja jest projektowana jako platforma niezależna od źródła danych, 
-przygotowana do integracji z docelowym torem pomiarowym w kolejnych etapach projektu.
+### Common Data Model
 
-## Schemat projektu
-![Application schema](./doc/schema-no-cloud.png)
+Both project stages enable the use of EEG data from various sources. The application has been designed with a modular architecture, allowing for easy expansion and integration of new data sources without requiring significant changes.
 
-## Komponenty systemu
-Komponenty systemu można podzielić na 4 warstwy
+<p align="center">
+  <img src="./doc/EarEEGApp-Mobile.gif" width="400">
+</p>
 
-**Warstwa 1**: Dane - ich żródło oraz przechowywanie
-- mikrokontroler z firmware symulującym EEG (docelowo nRF52840; na obecnym etapie wykorzystywany ESP32)
-- wspólny format danych
-- plik z danymi EEG (offline)
-- zapis innych danych pomocnicznych do SQLite
+## System Components
+The system components are divided into three layers:
 
-**Warstwa 2**: Transport danych (komunikacja aplikacja–mikrokontroler)
-- BLE
-- protokół ramek danych EEG (GATTA)
+**Layer 1**: Data - Source and Storage
+- EEG data file (offline
+- Saving auxiliary data to SQLite
+- Logs necessary for monitoring operation
 
-**Warstwa 3**: Logika aplikacji
-- parser danych EEG
-- buforowanie i synchronizacja
-- zarządzanie sesją pomiarową
+**Layer 2**: Application Logic
+- EEG data parser
+- Buffering and synchronization
+- Measurement session management
 
-**Warstwa 4**: Prezentacja
-- wizualizacja przebiegów
-- interakcja użytkownika
-- elementy biofeedbacku
-
-## Model danych EEG
-Dane EEG w Strumieniu B są reprezentowane w postaci strumienia ramek zawierających próbki 
-wielokanałowe wraz z informacją czasową. Taki model umożliwia jednolitą obsługę danych zarówno 
-symulowanych, jak i rzeczywistych.
-
-## Analiza ryzyka
-| Element | Co może pójść źle | Skutek |
-| -- | -- | -- |
-| BLE | utrata pakietów | artefakty w sygnale | 
-| Parser | błędna ramka | przesunięcie danych |
-| UI | lag | błędna interpretacja |
-| Zapis danych | brak zapisu | utrata sesji |
+**Layer 3**: Presentation
+- Waveform visualization
+- User interaction
+- Biofeedback elements

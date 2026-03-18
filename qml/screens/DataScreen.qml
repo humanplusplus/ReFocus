@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtCharts 2.15
 import EarEEG_DemoApp 1.0
 
 Page {
@@ -22,6 +21,7 @@ Page {
     property string titleHowToHangeText: "How to change it?"
 
     property string eegChartScreenPath: UiSettings.rootPathToQmlScreens + "EegChartScreen.qml"
+    property string datasourceSelectorScreenPath: UiSettings.rootPathToQmlScreens + "DataSourceSelectorScreen.qml"
     property string noteScreenPath: UiSettings.rootPathToQmlScreens + "NoteScreen.qml"
 
     background: Rectangle {
@@ -37,15 +37,12 @@ Page {
         repeat: true
 
         onTriggered: {
-            // losowy poziom (1–3)
             root.currentFocusLevel = Math.floor(Math.random() * 3) + 1
 
-            // pobranie zakresu dla danego poziomu
             var rec = recs.byLevel(root.currentFocusLevel)
             if (rec) {
                 var min = rec.minPercent
                 var max = rec.maxPercent
-                // losowa liczba z zakresu
                 root.currentFocusPercent = Math.floor(Math.random() * (max - min + 1)) + min
             }
         }

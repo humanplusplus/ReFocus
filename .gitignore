@@ -1,10 +1,12 @@
+build/
+*-build/
+Debug/
+Release/
+
+*.user
+*.exe
 *.o
 *.obj
-*.exe
-*.dll
-.qmake.stash
-CMakeLists.txt.user
-build/
-build-*/
-SQLite db — skrót*
-data/openbci_training_data_cut.csv
+
+SQLite db — skrót.lnk
+data/openbci_training_data_cut-LIGHT_VERSION.csv

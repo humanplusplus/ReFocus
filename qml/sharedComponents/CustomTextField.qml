@@ -10,8 +10,6 @@ TextField {
     property string innerText: ""
     property string placeholderInnerText
     property int maxTextLength: 40
-    property color backgroundColor: ThemeManager.colors.mediumRectangleBgColor
-    property color borderColor: ThemeManager.colors.linesColor
 
     // === DWUKIERUNKOWA SYNC ===
     // Gdy użytkownik zmienia text, aktualizuj innerText
@@ -27,8 +25,8 @@ TextField {
         width: parent.width
         height: parent.height
         radius: 21
-        color: backgroundColor
-        border.color: borderColor
+        color: ThemeManager.colors.mediumRectangleBgColor
+        border.color: ThemeManager.colors.linesColor
         border.width: 1
     }
 

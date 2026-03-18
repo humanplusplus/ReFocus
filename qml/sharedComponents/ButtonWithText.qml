@@ -7,8 +7,6 @@ Button {
     width: 120
 
     property string buttonText: "Confirm"
-    property color innerColor: ThemeManager.colors.cardsBackgroundColor
-    property color borderColor: ThemeManager.colors.linesColor
     property bool fontBold: false
     property real fontMultiplier: 1
     property real rectangleHeightMultiplier: 1
@@ -18,8 +16,8 @@ Button {
         width: parent.width * rectangleWidthMultiplier
         height: 40 * rectangleHeightMultiplier
         radius: 21
-        color: innerColor
-        border.color: borderColor
+        color: ThemeManager.colors.cardsBackgroundColor
+        border.color: ThemeManager.colors.linesColor
         border.width: 1
     }
 

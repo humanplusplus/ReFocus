@@ -6,7 +6,7 @@ QtObject {
     property var data: [
         {
             "level": 1,
-            "minPercent": 80,
+            "minPercent": 81,
             "maxPercent": 100,
             "recommendationTitle": "How to keep it?",
             "focusPercentage": "100 - 80%",
@@ -22,7 +22,7 @@ QtObject {
         },
         {
             "level": 2,
-            "minPercent": 40,
+            "minPercent": 41,
             "maxPercent": 80,
             "recommendationTitle": "How to change it?",
             "focusPercentage": "80 - 40%",
@@ -61,6 +61,6 @@ QtObject {
             if (data[i].level === level)
                 return data[i];
         }
-        return data.length > 0 ? data[0] : null;
+        return data.length > 0 ? data[2] : null;
     }
 }

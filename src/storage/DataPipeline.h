@@ -16,12 +16,11 @@ class DataPipeline : public QObject
 public:
     explicit DataPipeline(DatabaseManager *db, QObject *parent = nullptr);
 
-    // Metoda do ustawiania czasu startu, aby tx zaczynało się od 0
-    void setStartTime(qint64 startTime) { m_startTime = startTime; }
+    void setStartTime(qint64 startTime); // Metoda do ustawiania czasu startu, aby tx zaczynało się od 0
 
 public slots:
-    // Slot podłączony bezpośrednio do źródła danych (np. CSVDataSource)
-    void onNewSampleReceived(const EEGSample &sample);
+    void onNewSampleReceived(const EEGSample &sample); // Slot podłączony bezpośrednio do źródła danych (np. CSVDataSource)
+    void startProcessing();
 
 signals:
     // Sygnał wysyłany do EEGModel: Mapa <IneksKanału, ListaPunktówX_Y>
@@ -36,7 +35,7 @@ private:
     QVector<EEGSample> m_buffer;
     QTimer *m_flushTimer;
     qint64 m_startTime = 0;
-    const int m_uiRefreshRate = 16; // ~64Hz
+    const int m_uiRefreshRate = 33; // ~64Hz
 };
 
 #endif // DATAPIPELINE_H
