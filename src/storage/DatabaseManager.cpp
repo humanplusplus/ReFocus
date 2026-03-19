@@ -1,39 +1,46 @@
 #include "DatabaseManager.h"
 
 DatabaseManager::DatabaseManager(std::unique_ptr<IDatabaseManager> localBackend,
-                                 std::unique_ptr<IDatabaseManager> cloudBackend,
                                  QObject *parent)
     : QObject(parent),
-      local_(std::move(localBackend)),
-      cloud_(std::move(cloudBackend))
+      local_(std::move(localBackend))
 {}
 
 bool DatabaseManager::initialize()
 {
-    bool ok = true;
-
-    if (local_) {
-        ok &= local_->initialize();
-    } else {
+    if (!local_) {
         qWarning() << "No local backend provided!";
+        return false;
     }
 
-    if (cloud_) {
-        ok &= cloud_->initialize();
-    }
-
-    return ok;
+    return local_->initialize();
 }
 
-void DatabaseManager::insertRecord(const QString &table, const QVariantMap &data)
+bool DatabaseManager::insertData(const QString &table, const QVariantMap &data)
 {
-    if (local_) {
-        if (!local_->insertData(table, data)) {
-            qWarning() << "Local insert failed in table: " << table;
-        }
+    if (!local_) {
+        qWarning() << "No local backend for insertData";
+        return false;
     }
+    return local_->insertData(table, data);
+}
 
-    if (cloud_) {
-        cloud_->insertData(table, data);
+bool DatabaseManager::updateData(const QString &table,
+                                 const QVariantMap &data,
+                                 const QString &keyColumn)
+{
+    if (!local_) {
+        qWarning() << "No local backend for updateData";
+        return false;
     }
+    return local_->updateData(table, data, keyColumn);
+}
+
+QList<QVariantMap> DatabaseManager::queryData(const QString &queryStr)
+{
+    if (!local_) {
+        qWarning() << "No local backend for queryData";
+        return {};
+    }
+    return local_->queryData(queryStr);
 }

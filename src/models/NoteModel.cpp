@@ -5,22 +5,43 @@ NoteModel::NoteModel(NoteRepository *repo, QObject *parent)
     m_repo(repo)
 {}
 
-int NoteModel::rowCount(const QModelIndex &) const {
+int NoteModel::rowCount(const QModelIndex &parent) const {
+    if (parent.isValid())
+        return 0;
     return m_items.size();
 }
 
 QVariant NoteModel::data(const QModelIndex &index, int role) const {
-    QVariant();
+    if (!index.isValid() || index.row() < 0 || index.row() >= m_items.size())
+        return {};
+
+    const Note &n = m_items.at(index.row());
+
+    switch (role) {
+    case IdRole:
+        return n.id;
+    case TimestampRole:
+        return n.contentTimestamp;
+    case ContentRole:
+        return n.content;
+    case MoodRatingRole:
+        return n.moodRating;
+    case TagRole:
+        return n.tag;
+    default:
+        return {};
+    }
 }
 
 QHash<int, QByteArray> NoteModel::roleNames() const {
-    return {
-        { IdRole, "id" },
-        { TimestampRole, "contentTimestamp" },
-        { ContentRole, "contentRole" },
-        { MoodRatingRole, "moodRating" },
-        { TagRole, "tag" }
-    };
+    QHash<int, QByteArray> roles;
+    roles[IdRole] = "id";
+    roles[TimestampRole] = "contentTimestamp";
+    roles[ContentRole] = "contentRole";
+    roles[MoodRatingRole] = "moodRating";
+    roles[TagRole] = "tag";
+
+    return roles;
 }
 
 void NoteModel::addNote(const QString &contentTimestamp, const QString &content, int moodRating, const QString &tag)
@@ -32,14 +53,15 @@ void NoteModel::addNote(const QString &contentTimestamp, const QString &content,
     n.tag = tag;
 
     if(m_repo->addNote(n)) {
+        beginInsertRows(QModelIndex(), m_items.size(), m_items.size());
+        m_items.append(n);
+        endInsertRows();
         qDebug() << "Note add successfully.";
     } else {
         qWarning() << "Failed to add note.";
     }
 }
 
-void NoteModel::refresh()
-{
-
+void NoteModel::refresh() {
 }
 
