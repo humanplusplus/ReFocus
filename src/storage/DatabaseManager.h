@@ -7,7 +7,7 @@
 
 #include "IDatabaseManager.h"
 
-class DatabaseManager : public IDatabaseManager
+class DatabaseManager : public QObject, public IDatabaseManager
 {
     Q_OBJECT
 public:

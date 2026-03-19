@@ -44,7 +44,7 @@ void ApplicationController::initialize(QQmlApplicationEngine *engine)
     // 2. Konfiguracja bazy danych: tworzenie lokalnego SQLite
     QString dbPath = DatabaseConfig::getSqliteDbPath();
     std::unique_ptr<IDatabaseManager> localBackend = std::make_unique<SQLiteManager>(dbPath);
-    m_dbManager = new DatabaseManager(std::move(localBackend), nullptr, this);
+    m_dbManager = new DatabaseManager(std::move(localBackend), nullptr, nullptr);
     m_dbManager->initialize();
 
     // --- TWORZENIE NOWYCH MODUŁÓW ---
