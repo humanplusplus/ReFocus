@@ -1,0 +1,12 @@
+build/
+*-build/
+Debug/
+Release/
+
+*.user
+*.exe
+*.o
+*.obj
+
+SQLite db — skrót.lnk
+data/openbci_training_data_cut-LIGHT_VERSION.csv
