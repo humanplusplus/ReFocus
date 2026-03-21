@@ -61,8 +61,8 @@ void ApplicationController::initialize(QQmlApplicationEngine *engine)
     m_workerThread = new QThread(this);
 
     // // 5. PRZENIESIENIE DO WĄTKU (najpierw przenosimy, potem łączymy)
-    // m_dataSource->moveToThread(m_workerThread);
-    // m_dataPipeline->moveToThread(m_workerThread);
+    m_dataSource->moveToThread(m_workerThread);
+    m_dataPipeline->moveToThread(m_workerThread);
 
     // 6. ŁĄCZENIE SYGNAŁÓW
     connect(m_workerThread, &QThread::started, m_dataSource, &IDataSource::start);

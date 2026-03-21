@@ -97,7 +97,7 @@ Page {
                 buttonText: innerButtonText
 
                 onClicked: {
-                    console.log("Saving user:", nickname, gender, birthYear)
+                    console.log("Saving user: ", nickname, gender, birthYear)
 
                     participantModel.upsertUser(nickname, gender, birthYear)
                     participantModel.refresh()

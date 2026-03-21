@@ -158,42 +158,42 @@ Page {
             }
         }
 
-        // ---------------------------
-        // EKRAN: IKONA WYKRES EEG (PNG) - przekierowanie do prawdziwego wykresu
-        // ---------------------------
+        // // ---------------------------
+        // // EKRAN: IKONA WYKRES EEG (PNG) - przekierowanie do prawdziwego wykresu
+        // // ---------------------------
 
-        Column {
-            id: chartPreviewColumn
-            width: parent.width
-            spacing: 14
-            anchors.horizontalCenter: parent.horizontalCenter
+        // Column {
+        //     id: chartPreviewColumn
+        //     width: parent.width
+        //     spacing: 14
+        //     anchors.horizontalCenter: parent.horizontalCenter
 
-            // ---- PREVIEW WYKRESU (klikany) ----
-            Rectangle {
-                id: chartPreview
-                width: parent.width
-                height: 100
-                radius: ThemeManager.radii.radiusGeneral
-                color: "transparent" // ThemeManager.colors.mediumRectangleBgColor
-                border.color: "transparent" // ThemeManager.colors.linesColor
-                border.width: 1
-                anchors.horizontalCenter: parent.horizontalCenter
+        //     // ---- PREVIEW WYKRESU (klikany) ----
+        //     Rectangle {
+        //         id: chartPreview
+        //         width: parent.width
+        //         height: 100
+        //         radius: ThemeManager.radii.radiusGeneral
+        //         color: "transparent" // ThemeManager.colors.mediumRectangleBgColor
+        //         border.color: "transparent" // ThemeManager.colors.linesColor
+        //         border.width: 1
+        //         anchors.horizontalCenter: parent.horizontalCenter
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        stackView.push(eegChartScreenPath)
-                    }
-                }
+        //         MouseArea {
+        //             anchors.fill: parent
+        //             onClicked: {
+        //                 stackView.push(eegChartScreenPath)
+        //             }
+        //         }
 
-                CustomImage {
-                    anchors.centerIn: parent
-                    iconPath: ThemeManager.icons.eegImageIcon
-                    widthMultiplier: 3
-                    heightMultiplier: 3
-                }
-            }
-        }
+        //         CustomImage {
+        //             anchors.centerIn: parent
+        //             iconPath: MyStyles.earEeg2Image
+        //             widthMultiplier: 3
+        //             heightMultiplier: 3
+        //         }
+        //     }
+        // }
 
         // ---------------------------
         // EKRAN: LISTA REKOMENDACJI

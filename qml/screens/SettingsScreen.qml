@@ -6,13 +6,20 @@ import EarEEG_DemoApp 1.0
 
 Page {
     anchors.fill: parent
-    // property var themeData: ({})
-    // property var themeList: ["Dark", "Light", "Blue"]
-    // property string innerButtonText: "Apply"
-    // property string themeDefault: "Dark"
-    // property string themeTitle: "App theme"
+    property var themeData: ({})
 
-    property var themeList: ["dark", "light", "modern", "blue"]
+    Connections {
+        target: themeModel
+        function onThemeDataChanged() {
+            themeData = themeModel.getThemeDetails()
+        }
+    }
+
+    property var themeList: ["Dark", "Light", "Modern", "Blue"]
+
+    property string innerButtonText: "Apply"
+    property string themeDefault: "Dark"
+    property string themeTitle: "App theme"
 
     background: Rectangle {
         color: "transparent"
@@ -24,52 +31,29 @@ Page {
         spacing: 20
 
         CustomLabel {
-            labelText: "App theme"
+            labelText: themeTitle
             textBold: true
         }
 
-        ComboBox {
+        CustomComboBox {
             id: themeCombo
+            width: parent.width
             model: themeList
-            currentIndex: themeList.indexOf(ThemeManager.currentTheme.name)
+            currentIndex: themeList.indexOf(themeDefault)
+            onCurrentIndexChanged: themeDefault = themeList[currentIndex]
         }
 
-        Button {
-            text: "Apply"
+        ButtonWithText {
+            anchors.right: parent.right
+            buttonText: innerButtonText
+
             onClicked: {
-                ThemeManager.setTheme(themeList[themeCombo.currentIndex])
+                console.log("Saving theme data: ", theme)
+
+                // ThemeManager.setTheme(themeList[themeCombo.currentIndex])
+                // themeModel.upsertTheme(theme)
+                // themeModel.refresh()
             }
         }
     }
-
-    // Item {
-    //     width: parent.width
-    //     height: parent.height - 10
-    //     anchors.centerIn: parent
-
-    //     Column {
-    //         spacing: 8
-    //         anchors.left: parent.left
-    //         anchors.right: parent.right
-    //         anchors.margins: 10
-
-    //         CustomLabel {
-    //             labelText: themeTitle
-    //             textBold: true
-    //         }
-
-    //         CustomComboBox {
-    //             id: genderCombo
-    //             width: parent.width
-    //             model: themeList
-    //             currentIndex: themeList.indexOf(themeDefault)
-    //             onCurrentIndexChanged: gender = themeList[currentIndex]
-    //         }
-
-    //         ButtonWithText {
-    //             anchors.right: parent.right
-    //             buttonText: innerButtonText
-    //         }
-    //     }
-    // }
 }

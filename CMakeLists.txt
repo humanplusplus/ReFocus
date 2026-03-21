@@ -63,6 +63,7 @@ qt_add_qml_module(appEarEEG_DemoApp
         qml/sharedComponents/ButtonWithText.qml
         qml/sharedComponents/LineSeparator.qml
         qml/sharedComponents/TabButtonFooter.qml
+        qml/sharedComponents/CustomTextArea.qml
 
         qml/eegComponents/FocusRecommendations.qml
 
@@ -117,6 +118,7 @@ qt_add_qml_module(appEarEEG_DemoApp
         # GENERAL
         assets/example-eegchart-with4channels.png
         assets/EarEEG.png
+        assets/EarEEG2.png
         assets/arrowStraight.png
         assets/arrowDown.png
         assets/arrowTop.png
