@@ -9,6 +9,8 @@
 class EEGModel;
 class NoteModel;
 class NoteRepository;
+class ParticipantModel;
+class ParticipantRepository;
 class DataPipeline;
 class SQLiteManager;
 class IDataSource;
@@ -31,6 +33,8 @@ private:
     EEGModel* m_eegModel;
     NoteModel* m_noteModel;
     NoteRepository* m_noteRepo;
+    ParticipantModel* m_participantModel;
+    ParticipantRepository* m_participantRepo;
     DataPipeline* m_dataPipeline;
     IDataSource* m_dataSource;
     DatabaseManager* m_dbManager;

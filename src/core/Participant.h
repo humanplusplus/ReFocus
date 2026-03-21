@@ -3,8 +3,7 @@
 
 #include <QString>
 
-struct Participant
-{
+struct Participant {
     int id = -1;
     QString nickname;
     QString gender;

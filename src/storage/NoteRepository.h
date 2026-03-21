@@ -7,8 +7,7 @@
 #include "core/Note.h"
 #include "IDatabaseManager.h"
 
-class NoteRepository : public QObject
-{
+class NoteRepository : public QObject {
     Q_OBJECT
 public:
     NoteRepository(IDatabaseManager *dataManager, QObject *parent = nullptr);

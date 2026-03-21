@@ -5,6 +5,8 @@
 #include "models/EEGModel.h"
 #include "models/NoteModel.h"
 #include "storage/NoteRepository.h"
+#include "models/ParticipantModel.h"
+#include "storage/ParticipantRepository.h"
 #include "providers/CsvDataSource.h"
 #include "storage/DataPipeline.h"
 #include "storage/SQLiteManager.h"
@@ -16,6 +18,8 @@ ApplicationController::ApplicationController(QObject *parent)
     m_eegModel(nullptr),
     m_noteModel(nullptr),
     m_noteRepo(nullptr),
+    m_participantModel(nullptr),
+    m_participantRepo(nullptr),
     m_dataPipeline(nullptr),
     m_dataSource(nullptr),
     m_dbManager(nullptr),
@@ -53,6 +57,11 @@ void ApplicationController::initialize(QQmlApplicationEngine *engine)
 
     connect(m_noteRepo, &NoteRepository::noteDataChanged, m_noteModel, &NoteModel::refresh);
 
+    m_participantRepo = new ParticipantRepository(m_dbManager, this);
+    m_participantModel = new ParticipantModel(m_participantRepo, this);
+
+    connect(m_participantRepo, &ParticipantRepository::participantDataChanged, m_participantModel, &ParticipantModel::refresh);
+
     // 3. Rurociąg danych i źródło danych CSV: przekazujemy nullptr zamiast DatabaseManager, skoro na razie nie zapisujemy tam EEG
     m_dataPipeline = new DataPipeline(nullptr, nullptr);
     m_dataSource = new CsvDataSource(DatabaseConfig::getCsvPath(), nullptr);
@@ -83,6 +92,8 @@ void ApplicationController::initialize(QQmlApplicationEngine *engine)
     context->setContextProperty("eegModel", m_eegModel);
     context->setContextProperty("noteRepo", m_noteRepo);
     context->setContextProperty("noteModel", m_noteModel);
+    context->setContextProperty("participantRepo", m_participantRepo);
+    context->setContextProperty("participantModel", m_participantModel);
     context->setContextProperty("appController", this);
 
     qInfo() << "Initialization complete.";

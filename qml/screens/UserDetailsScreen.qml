@@ -6,15 +6,21 @@ import EarEEG_DemoApp 1.0
 
 Page {
     anchors.fill: parent
-    property var userData: ({})
+    property var participantData: ({})
 
     Connections {
         target: participantModel
-        function onUserDataChanged() {
-            userData = participantModel.getUserDetails()
-            nickname = userData.nickname ?? ""
-            gender = userData.gender ?? "Woman"
-            birthYear = userData.birth_year ?? 1990
+        function onParticipantDataChanged() {
+            let data = participantModel.getParticipantDetails()
+            if (data.nickname !== undefined) {
+                nicknameItem.innerText = data.nickname
+                birthYearItem.innerText = data.birth_year.toString()
+                genderCombo.currentIndex = Math.max(0, genderList.indexOf(data.gender))
+
+                nickname = data.nickname
+                birthYear = data.birth_year
+                gender = data.gender
+            }
         }
     }
 
@@ -98,17 +104,9 @@ Page {
 
                 onClicked: {
                     console.log("Saving user: ", nickname, gender, birthYear)
-
-                    participantModel.upsertUser(nickname, gender, birthYear)
+                    participantModel.upsertParticipant(nickname, gender, birthYear)
                     participantModel.refresh()
-                    userData = participantModel.getUserDetails()
-
-                    if (userData.nickname !== undefined) {
-                        nicknameItem.innerText = userData.nickname
-                        genderCombo.currentIndex = Math.max(0, genderList.indexOf(userData.gender ?? genderDefault))
-                        birthYearItem.innerText = userData.birth_year.toString()
-                    }
-                    console.log("User data updated:", JSON.stringify(userData))
+                    console.log("User data updated:", JSON.stringify(participantData))
                 }
             }
         }

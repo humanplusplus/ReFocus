@@ -3,9 +3,7 @@
 #include "ParticipantModel.h"
 
 ParticipantModel::ParticipantModel(ParticipantRepository *repo, QObject *parent)
-    : QAbstractListModel(parent),
-    m_repo(repo)
-{
+    : QAbstractListModel(parent), m_repo(repo) {
     refresh();
 }
 
@@ -20,21 +18,22 @@ QVariant ParticipantModel::data(const QModelIndex &index, int role) const {
     const Participant &p = m_items[index.row()];
 
     switch (role) {
-        case IdRole: return p.id;
-        case NicknameRole: return p.nickname;
-        case GenderRole: return p.gender;
+        case IdRole:        return p.id;
+        case NicknameRole:  return p.nickname;
+        case GenderRole:    return p.gender;
         case BirthYearRole: return p.birthYear;
-        default: return QVariant();
+        default:            return QVariant();
     }
 }
 
 QHash<int, QByteArray> ParticipantModel::roleNames() const {
-    return {
-        { IdRole, "id" },
-        { NicknameRole, "nickname" },
-        { GenderRole, "gender" },
-        { BirthYearRole, "birth_year" }
-    };
+    QHash<int, QByteArray> roles;
+    roles[IdRole] = "id";
+    roles[NicknameRole] = "nickname";
+    roles[GenderRole] = "gender";
+    roles[BirthYearRole] = "birth_year";
+
+    return roles;
 }
 
 void ParticipantModel::refresh() {
@@ -42,10 +41,10 @@ void ParticipantModel::refresh() {
     m_items = m_repo->getAllParticipants();
     endResetModel();
 
-    emit userDataChanged();
+    emit participantDataChanged();
 }
 
-QVariantMap ParticipantModel::getUserDetails() {
+QVariantMap ParticipantModel::getParticipantDetails() {
     QVariantMap map;
 
     if (m_items.isEmpty()) {
@@ -62,10 +61,7 @@ QVariantMap ParticipantModel::getUserDetails() {
     return map;
 }
 
-void ParticipantModel::upsertUser(const QString &nickname,
-                                  const QString &gender,
-                                  int birthYear)
-{
+void ParticipantModel::upsertParticipant(const QString &nickname, const QString &gender, int birthYear) {
     Participant p;
     p.nickname = nickname;
     p.gender = gender;

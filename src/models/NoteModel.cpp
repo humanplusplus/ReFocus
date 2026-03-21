@@ -1,9 +1,7 @@
 #include "NoteModel.h"
 
 NoteModel::NoteModel(NoteRepository *repo, QObject *parent)
-    : QAbstractListModel(parent),
-    m_repo(repo)
-{}
+    : QAbstractListModel(parent), m_repo(repo) {}
 
 int NoteModel::rowCount(const QModelIndex &parent) const {
     if (parent.isValid())
@@ -18,18 +16,12 @@ QVariant NoteModel::data(const QModelIndex &index, int role) const {
     const Note &n = m_items.at(index.row());
 
     switch (role) {
-    case IdRole:
-        return n.id;
-    case TimestampRole:
-        return n.contentTimestamp;
-    case ContentRole:
-        return n.content;
-    case MoodRatingRole:
-        return n.moodRating;
-    case TagRole:
-        return n.tag;
-    default:
-        return {};
+        case IdRole:            return n.id;
+        case TimestampRole:     return n.contentTimestamp;
+        case ContentRole:       return n.content;
+        case MoodRatingRole:    return n.moodRating;
+        case TagRole:           return n.tag;
+        default:                return {};
     }
 }
 
@@ -44,8 +36,7 @@ QHash<int, QByteArray> NoteModel::roleNames() const {
     return roles;
 }
 
-void NoteModel::addNote(const QString &contentTimestamp, const QString &content, int moodRating, const QString &tag)
-{
+void NoteModel::addNote(const QString &contentTimestamp, const QString &content, int moodRating, const QString &tag) {
     Note n;
     n.contentTimestamp = contentTimestamp;
     n.content = content;

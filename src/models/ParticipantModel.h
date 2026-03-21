@@ -1,8 +1,10 @@
 #ifndef PARTICIPANTMODEL_H
 #define PARTICIPANTMODEL_H
 
+#include <QObject>
 #include <QAbstractListModel>
 #include <QVariantMap>
+
 #include "core/Participant.h"
 #include "storage/ParticipantRepository.h"
 
@@ -24,15 +26,13 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    Q_INVOKABLE QVariantMap getUserDetails();
-    Q_INVOKABLE void upsertUser(const QString &nickname,
-                                const QString &gender,
-                                int birthYear);
+    Q_INVOKABLE QVariantMap getParticipantDetails();
+    Q_INVOKABLE void upsertParticipant(const QString &nickname, const QString &gender, int birthYear);
 
     Q_INVOKABLE void refresh();
 
 signals:
-    void userDataChanged();
+    void participantDataChanged();
 
 private:
     QList<Participant> m_items;
