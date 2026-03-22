@@ -94,6 +94,8 @@ qt_add_qml_module(appEarEEG_DemoApp
         src/storage/ParticipantRepository.cpp
         src/storage/NoteRepository.h
         src/storage/NoteRepository.cpp
+        src/storage/SettingsRepository.h
+        src/storage/SettingsRepository.cpp
 
         src/providers/IDataSource.h
         src/providers/CsvDataSource.h
@@ -128,7 +130,6 @@ qt_add_qml_module(appEarEEG_DemoApp
         assets/themeDarkIcons/data-analysis.png
         assets/themeDarkIcons/user.png
         assets/themeDarkIcons/house.png
-        assets/themeDarkIcons/eeg-image.png
         assets/themeDarkIcons/logout.png
         assets/themeDarkIcons/settings.png
 
@@ -137,7 +138,6 @@ qt_add_qml_module(appEarEEG_DemoApp
         assets/themeLightIcons/data-analysis.png
         assets/themeLightIcons/user.png
         assets/themeLightIcons/house.png
-        assets/themeLightIcons/eeg-image.png
         assets/themeLightIcons/logout.png
         assets/themeLightIcons/settings.png
 
@@ -146,7 +146,6 @@ qt_add_qml_module(appEarEEG_DemoApp
         assets/themeBlueIcons/data-analysis.png
         assets/themeBlueIcons/user.png
         assets/themeBlueIcons/house.png
-        assets/themeBlueIcons/eeg-image.png
         assets/themeBlueIcons/logout.png
         assets/themeBlueIcons/settings.png
 
@@ -155,7 +154,6 @@ qt_add_qml_module(appEarEEG_DemoApp
         assets/themeModernIcons/data-analysis.png
         assets/themeModernIcons/user.png
         assets/themeModernIcons/house.png
-        assets/themeModernIcons/eeg-image.png
         assets/themeModernIcons/logout.png
         assets/themeModernIcons/settings.png
 )

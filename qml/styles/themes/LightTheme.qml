@@ -50,7 +50,6 @@ QtObject {
         property string chartsIcon:         UiSettings.rootPath + "assets/themeLightIcons/data-analysis.png"
         property string userIcon:           UiSettings.rootPath + "assets/themeLightIcons/user.png"
         property string homeIcon:           UiSettings.rootPath + "assets/themeLightIcons/house.png"
-        property string eegImageIcon:       UiSettings.rootPath + "assets/themeLightIcons/eeg-image.png"
         property string logoutIcon:         UiSettings.rootPath + "assets/themeLightIcons/logout.png"
         property string settingsIcon:       UiSettings.rootPath + "assets/themeLightIcons/settings.png"
     }

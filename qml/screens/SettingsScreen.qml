@@ -39,8 +39,8 @@ Page {
             id: themeCombo
             width: parent.width
             model: themeList
-            currentIndex: themeList.indexOf(themeDefault)
-            onCurrentIndexChanged: themeDefault = themeList[currentIndex]
+            currentIndex: themeList.indexOf(ThemeManager.activeThemeName)
+            //onCurrentIndexChanged: themeDefault = themeList[currentIndex]
         }
 
         ButtonWithText {
@@ -48,11 +48,8 @@ Page {
             buttonText: innerButtonText
 
             onClicked: {
-                console.log("Saving theme data: ", theme)
-
-                // ThemeManager.setTheme(themeList[themeCombo.currentIndex])
-                // themeModel.upsertTheme(theme)
-                // themeModel.refresh()
+                ThemeManager.setTheme(themeCombo.currentText)
+                console.log("Theme changed for: ", themeCombo.currentIndex)
             }
         }
     }

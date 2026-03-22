@@ -38,7 +38,7 @@ QtObject {
 
     property QtObject charts: QtObject {
         // *** CHART SETTINGS ***
-        property int chartTheme: ChartView.ChartThemeDark
+        property int chartTheme: ChartView.ChartThemeLight
     }
 
     property QtObject icons: QtObject {
@@ -50,7 +50,6 @@ QtObject {
         property string chartsIcon:         UiSettings.rootPath + "assets/themeBlueIcons/data-analysis.png"
         property string userIcon:           UiSettings.rootPath + "assets/themeBlueIcons/user.png"
         property string homeIcon:           UiSettings.rootPath + "assets/themeBlueIcons/house.png"
-        property string eegImageIcon:       UiSettings.rootPath + "assets/themeBlueIcons/eeg-image.png"
         property string logoutIcon:         UiSettings.rootPath + "assets/themeBlueIcons/logout.png"
         property string settingsIcon:       UiSettings.rootPath + "assets/themeBlueIcons/settings.png"
     }

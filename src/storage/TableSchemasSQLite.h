@@ -16,6 +16,9 @@ namespace TableNamesSQLite {
 
 namespace TableSchemasSQLite {
 
+    // ---------------------------
+    // CREATE TABLES
+    // ---------------------------
     inline const QString CREATE_SETTINGS_TABLE = QStringLiteral(R"(
         CREATE TABLE IF NOT EXISTS %1 (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -125,16 +128,26 @@ namespace TableSchemasSQLite {
         )
     )").arg(TableNamesSQLite::EEG_SESSIONS, TableNamesSQLite::PARTICIPANTS);
 
+    // ---------------------------
+    // INSERT DATA
+    // ---------------------------
+    inline const QString INITIALIZE_DEFAULT_THEME = QStringLiteral(R"(
+        INSERT OR IGNORE INTO %1 (key, value) VALUES ('selected_theme', 'Dark');
+    )").arg(TableNamesSQLite::SETTINGS);
+
     // Zwracamy wszystkie CREATE TABLES
     inline const QStringList& createAllTables() {
         static const QStringList createAllTbl = {
+            // CREATE TABLES
             CREATE_SETTINGS_TABLE,
             CREATE_USERS_TABLE,
             CREATE_PARTICIPANTS_TABLE,
             CREATE_USER_NOTES_TABLE,
             CREATE_EEG_SESSIONS_TABLE,
             CREATE_EEG_EVENTS_TABLE,
-            CREATE_EEG_FEAUTERS_TABLE
+            CREATE_EEG_FEAUTERS_TABLE,
+            // INSERT DATA
+            INITIALIZE_DEFAULT_THEME
         };
         return createAllTbl;
     }

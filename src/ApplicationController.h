@@ -11,6 +11,7 @@ class NoteModel;
 class NoteRepository;
 class ParticipantModel;
 class ParticipantRepository;
+class SettingsRepository;
 class DataPipeline;
 class SQLiteManager;
 class IDataSource;
@@ -35,6 +36,7 @@ private:
     NoteRepository* m_noteRepo;
     ParticipantModel* m_participantModel;
     ParticipantRepository* m_participantRepo;
+    SettingsRepository* m_settingsRepo;
     DataPipeline* m_dataPipeline;
     IDataSource* m_dataSource;
     DatabaseManager* m_dbManager;
