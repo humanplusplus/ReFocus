@@ -10,7 +10,7 @@ The first part of the project focuses on constructing and launching the hardware
 
 The primary inspiration for the measurement path was [the OpenBCI project](https://pmc.ncbi.nlm.nih.gov/articles/PMC9529594/#ab010), from which specialized electrodes were also purchased. The heart of the system is the ADS1299 evaluation board from Texas Instruments (TI). The entire system was successfully launched and configured using TI's dedicated software.
 
-This stage includes connecting the electrodes to the measurement system and transmitting data to a computer. Detailed information and documentation for this stage can be found here: [LINK]()
+This stage includes connecting the electrodes to the measurement system and transmitting data to a computer. Detailed information and documentation for this stage can be found here: [LINK](https://www.instructables.com/Ear-EEG-OpenBCI-CEEGrid-ADS1299EEGFE-PDK/)
 
 **Stage B**: EEG Application and Simulation Platform (Available in this repository)
 
@@ -28,7 +28,7 @@ Both project stages enable the use of EEG data from various sources. The applica
 The system components are divided into three layers:
 
 **Layer 1**: Data - Source and Storage
-- EEG data file (offline
+- EEG data file (offline)
 - Saving auxiliary data to SQLite
 - Logs necessary for monitoring operation
 
@@ -41,3 +41,9 @@ The system components are divided into three layers:
 - Waveform visualization
 - User interaction
 - Biofeedback elements
+
+## ⚖️ License
+
+This project is licensed under the Apache License, Version 2.0 (the "License").
+
+You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0
