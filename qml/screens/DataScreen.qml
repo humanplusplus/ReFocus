@@ -110,27 +110,29 @@ Page {
             width: parent.width
             height: 100
             color: ThemeManager.colors.mediumRectangleBgColor
+            border.color: ThemeManager.colors.generalBorderColor
             radius: ThemeManager.radii.radiusGeneral
 
             Column {
                 anchors.fill: parent
-                anchors.margins: 10
-                spacing: 7
+                // anchors.margins: 12
+                // spacing: 7
 
-                // napis na górze
-                Text {
-                    text: titleText
-                    color: "transparent" // currentRec ? currentRec.color : MyStyles.fontColor
-                    font.pixelSize: 10
-                    font.bold: true
-                    horizontalAlignment: Text.AlignHCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
+                // // napis na górze - current score
+                // Text {
+                //     text: titleText
+                //     color: "transparent" // currentRec ? currentRec.color : MyStyles.fontColor
+                //     font.pixelSize: 10
+                //     font.bold: true
+                //     horizontalAlignment: Text.AlignHCenter
+                //     anchors.horizontalCenter: parent.horizontalCenter
+                // }
 
                 // wiersz z % i ikonką
                 Row {
                     spacing: 12
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    // anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.centerIn: parent
 
                     Text {
                         text: currentFocusPercent + "%" //currentRec ? currentRec.focusPercentage : "--"

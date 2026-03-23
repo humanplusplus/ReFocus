@@ -34,7 +34,7 @@ TextArea {
     background: Rectangle {
         radius: 21
         color: ThemeManager.colors.mediumRectangleBgColor
-        border.color: control.activeFocus ? ThemeManager.colors.accentColor : ThemeManager.colors.linesColor
+        border.color:  ThemeManager.colors.linesColor
         border.width: 1
     }
 }

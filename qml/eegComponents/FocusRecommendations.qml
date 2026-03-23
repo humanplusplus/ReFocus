@@ -13,7 +13,7 @@ QtObject {
             "arrowIconFileName": "arrowTop.png",
             "description": "High level of attention",
             "detailedDescription": "The mind works in a state of effective attention.",
-            "color": "#299A13",
+            "color": "#16DC00",
             "recommendations": [
                 "It's worth taking regular, short regenerative breaks before fatigue sets in.",
                 "Stay hydrated – drinking water helps maintain concentration.",
@@ -29,7 +29,7 @@ QtObject {
             "arrowIconFileName": "arrowStraight.png",
             "description": "Moderate level of concentration",
             "detailedDescription": "Attention is partially maintained but susceptible to distraction.",
-            "color": "#A89519",
+            "color": "#FFF700",
             "recommendations": [
                 "Turn off notifications and put your phone away.",
                 "Work in short sessions.",
@@ -40,14 +40,14 @@ QtObject {
         },
         {
             "level": 3,
-            "minPercent": 0,
+            "minPercent": 1,
             "maxPercent": 40,
             "recommendationTitle": "How to change it?",
-            "focusPercentage": "40 - 0%",
+            "focusPercentage": "40 - 1%",
             "arrowIconFileName": "arrowDown.png",
             "description": "Low level of attention",
             "detailedDescription": "Brain activity indicates reduced concentration of attention and dominance of external stimuli.",
-            "color": "#841515",
+            "color": "#FF0000",
             "recommendations": [
                 "Take a short break, stretch, drink some water, and breathe deeply.",
                 "A temporary change of scenery or a short walk may be helpful.",

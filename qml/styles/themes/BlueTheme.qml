@@ -8,28 +8,28 @@ QtObject {
 
     property QtObject colors: QtObject {
         // *** GENERAL SETTINGS ***
-        property color backgroundColor: "#FFFFFF"
-        property color linesColor:      "#a6dced"
-        property color ribbonColor:     "#a6dced"
+        property color backgroundColor: "#E1F8FD"
+        property color linesColor:      "#0B2964"
+        property color ribbonColor:     "#ABF8FA"
 
         // *** CARDS PROPERIES ***
-        property color cardsBackgroundColor: "#a6dced"
-        property color mediumRectangleBgColor: "#a6dced"
-        property color smallRectangleBgColor: "#a6dced"
+        property color cardsBackgroundColor: "#ABF8FA"
+        property color mediumRectangleBgColor: "#ABF8FA"
+        property color smallRectangleBgColor: "#ABF8FA"
 
         // *** LIST PROPERIES ***
-        property color listLineColor: "#a6dced"
-        property color generalBorderColor: "#a6dced"
+        property color listLineColor: "#0B2964"
+        property color generalBorderColor: "#0B2964"
 
         // *** BUTTONS PROPERIES ***
-        property color buttonBorderColor: "#a6dced"
-        property color radioButtonCheckedColor: "#a6dced"
+        property color buttonBorderColor: "#0B2964"
+        property color radioButtonCheckedColor: "#ABF8FA"
     }
 
     property QtObject fonts: QtObject {
         property string fontStyle: "Courier New"
         property int fontSize: 16
-        property color fontColor: "#000000"
+        property color fontColor: "#0B2964"
     }
 
     property QtObject radii: QtObject {
