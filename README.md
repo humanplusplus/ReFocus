@@ -1,3 +1,6 @@
+# Sponsorship
+![Logo Sponsora](assets/LaboratoriumPomyslow_logo.png)
+
 # Project Description
 
 This project is a continuation of work on the Ear EEG system, which aims to record, transmit, and visualize electroencephalographic signals obtained from electrodes placed around the ear. During implementation, the system architecture was intentionally divided into two complementary development streams. This allowed for the parallel development of the measurement path and the application layer, while accelerating the testing and validation process.
